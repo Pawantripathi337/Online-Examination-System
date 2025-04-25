@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms & Conditions - Online Examination System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Header Section */
+    header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    header img {
+      height: 50px;
+      margin-right: 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 30px;
+      width: 90%;
+      max-width: 800px;
+      margin: 100px auto 50px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .container h2 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #fff;
+      text-align: center;
+    }
+
+    /* Collapsible Sections */
+    .collapsible {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .collapsible-header {
+      padding: 15px 20px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+    }
+
+    .collapsible-header i {
+      transition: transform 0.3s ease;
+    }
+
+    .collapsible-content {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .collapsible-content p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+
+    .collapsible.active .collapsible-content {
+      max-height: 500px; /* Adjust based on content */
+      padding: 20px;
+    }
+
+    .collapsible.active .collapsible-header i {
+      transform: rotate(180deg);
+    }
+    .next-button {
+        display: block;
+        margin: 30px auto 0;
+        background-color: #2980b9;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+    }
+    .next-button:hover {
+        background-color: #216aa7;
+    }
+    /* Footer Section */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    footer p {
+      margin: 0;
+      font-size: 14px;
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header Section -->
+  <header>
+   
+    <h1>ExamSys</h1>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h2>Terms & Conditions and Rules</h2>
+
+    <!-- Collapsible Sections -->
+    <div class="collapsible">
+      <div class="collapsible-header">
+        <span>1. Examination Rules</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="collapsible-content">
+        <p>
+          - Candidates must log in to the examination portal 10 minutes before the scheduled time.<br>
+          - Use of any unauthorized materials or devices during the exam is strictly prohibited.<br>
+          - Any form of cheating or malpractice will result in immediate disqualification.<br>
+          - Ensure a stable internet connection throughout the examination.
+        </p>
+      </div>
+    </div>
+
+    <div class="collapsible">
+      <div class="collapsible-header">
+        <span>2. Privacy Policy</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="collapsible-content">
+        <p>
+          - Your personal information will be used solely for examination purposes.<br>
+          - We do not share your data with third parties without your consent.<br>
+          - All data is stored securely and encrypted to protect your privacy.
+        </p>
+      </div>
+    </div>
+
+    <div class="collapsible">
+      <div class="collapsible-header">
+        <span>3. Code of Conduct</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="collapsible-content">
+        <p>
+          - Treat all users and administrators with respect.<br>
+          - Do not engage in any form of harassment or discrimination.<br>
+          - Follow all instructions provided by the examination administrators.
+        </p>
+      </div>
+    </div>
+
+    <div class="collapsible">
+      <div class="collapsible-header">
+        <span>4. Technical Requirements</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="collapsible-content">
+        <p>
+          - A modern browser (Chrome, Firefox, or Edge) is required.<br>
+          - Ensure your device meets the minimum system requirements.<br>
+          - Disable any pop-up blockers or extensions that may interfere with the exam.
+        </p>
+      </div>
+      <a href="sub.html" class="next-button">Next</a>
+    </div>
+  </div>
+
+  
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2023 Online Examination System. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript for Collapsible Sections -->
+  <script>
+    document.querySelectorAll('.collapsible-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const collapsible = header.parentElement;
+        collapsible.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>

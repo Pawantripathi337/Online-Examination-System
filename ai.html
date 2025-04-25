@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .input-section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result-section {
+            margin-top: 30px;
+        }
+        .question-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .question-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .loading {
+            text-align: center;
+            display: none;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .settings {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f1f5f9;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Question Generator</h1>
+        
+        <div class="input-section">
+            <label for="topic">Enter a topic:</label>
+            <input type="text" id="topic" placeholder="e.g. Artificial Intelligence, World War II, Quantum Physics..." autofocus>
+        </div>
+        
+        <div class="settings">
+            <label for="question-type">Question Type:</label>
+            <select id="question-type">
+                <option value="general">General Questions</option>
+                <option value="deep">Deep/Thought-provoking</option>
+                <option value="fact">Fact-based</option>
+                <option value="opinion">Opinion-based</option>
+                <option value="hypothetical">Hypothetical</option>
+            </select>
+            
+            <label for="question-count" style="margin-top: 10px;">Number of Questions:</label>
+            <select id="question-count">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
+        </div>
+        
+        <button id="generate-btn">Generate Questions</button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating questions...</p>
+        </div>
+        
+        <div class="result-section" id="result-section">
+            <h2>Generated Questions:</h2>
+            <ul class="question-list" id="question-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generate-btn').addEventListener('click', generateQuestions);
+        
+        function generateQuestions() {
+            const topic = document.getElementById('topic').value.trim();
+            const questionType = document.getElementById('question-type').value;
+            const questionCount = parseInt(document.getElementById('question-count').value);
+            
+            if (!topic) {
+                alert('Please enter a topic first!');
+                return;
+            }
+            
+            // Show loading spinner
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result-section').style.display = 'none';
+            
+            // Clear previous results
+            document.getElementById('question-list').innerHTML = '';
+            
+            // Simulate processing delay (in a real app, this would be an API call)
+            setTimeout(() => {
+                const questions = generateQuestionsBasedOnInput(topic, questionType, questionCount);
+                displayQuestions(questions);
+                
+                // Hide loading spinner
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result-section').style.display = 'block';
+            }, 1000);
+        }
+        
+        function generateQuestionsBasedOnInput(topic, type, count) {
+            const questionTemplates = {
+                general: [
+                    `What is ${topic} and how does it work?`,
+                    `Why is ${topic} important?`,
+                    `How has ${topic} changed over time?`,
+                    `What are the main components of ${topic}?`,
+                    `How does ${topic} affect our daily lives?`,
+                    `What are the different types of ${topic}?`,
+                    `What are some common misconceptions about ${topic}?`,
+                    `How would you explain ${topic} to a beginner?`,
+                    `What are the benefits and drawbacks of ${topic}?`,
+                    `What skills are needed to understand ${topic}?`
+                ],
+                deep: [
+                    `What are the philosophical implications of ${topic}?`,
+                    `How might ${topic} change the future of humanity?`,
+                    `What ethical concerns does ${topic} raise?`,
+                    `Is ${topic} ultimately beneficial or harmful to society? Why?`,
+                    `How does ${topic} challenge our traditional ways of thinking?`,
+                    `What would the world look like without ${topic}?`,
+                    `How does ${topic} intersect with concepts of morality and justice?`,
+                    `What fundamental truths about life does ${topic} reveal?`,
+                    `How might ${topic} evolve in the next 100 years?`,
+                    `What would ancient philosophers think about ${topic}?`
+                ],
+                fact: [
+                    `What are the key statistics about ${topic}?`,
+                    `When was ${topic} first discovered/invented?`,
+                    `Who are the most influential figures in ${topic}?`,
+                    `What are the scientifically proven facts about ${topic}?`,
+                    `What historical events are related to ${topic}?`,
+                    `What are the measurable effects of ${topic}?`,
+                    `What geographical locations are most associated with ${topic}?`,
+                    `What are the most important dates in the history of ${topic}?`,
+                    `What are the chemical/biological/physical properties of ${topic}?`,
+                    `What research studies have been conducted on ${topic}?`
+                ],
+                opinion: [
+                    `What is your personal view on ${topic} and why?`,
+                    `Do you think ${topic} is overrated or underrated? Why?`,
+                    `How do different cultures perceive ${topic}?`,
+                    `What controversial opinions exist about ${topic}?`,
+                    `What would make you change your mind about ${topic}?`,
+                    `What personal experiences have shaped your view of ${topic}?`,
+                    `Which side of the debate about ${topic} do you agree with more?`,
+                    `What artistic interpretations of ${topic} do you find most compelling?`,
+                    `How do your values influence your perspective on ${topic}?`,
+                    `What emotional responses does ${topic} evoke in you?`
+                ],
+                hypothetical: [
+                    `What would happen if ${topic} suddenly disappeared?`,
+                    `How would you redesign ${topic} if you had unlimited resources?`,
+                    `What if ${topic} had been discovered/invented 100 years earlier?`,
+                    `How might ${topic} be different in an alternate universe?`,
+                    `What would an alien civilization think about ${topic}?`,
+                    `If you could ask one question about ${topic} to an all-knowing being, what would it be?`,
+                    `How would ${topic} function in a world with different physical laws?`,
+                    `What if the opposite of ${topic} was true?`,
+                    `How would ${topic} be different if humans had evolved differently?`,
+                    `What would a perfect version of ${topic} look like?`
+                ]
+            };
+            
+            // Select the appropriate template array based on type
+            let selectedTemplates = questionTemplates[type] || questionTemplates.general;
+            
+            // Generate questions by replacing the topic placeholder
+            let questions = [];
+            for (let i = 0; i < Math.min(count, selectedTemplates.length); i++) {
+                let question = selectedTemplates[i];
+                // Some variation in how the topic is inserted
+                if (Math.random() > 0.7) {
+                    question = question.replace('${topic}', `the concept of ${topic}`);
+                } else if (Math.random() > 0.5 && !question.includes('${topic}')) {
+                    question = question.replace('${topic}', topic.toLowerCase());
+                } else {
+                    question = question.replace('${topic}', topic);
+                }
+                questions.push(question);
+            }
+            
+            // If we need more questions than the template provides, generate some generic ones
+            if (count > selectedTemplates.length) {
+                const extraCount = count - selectedTemplates.length;
+                const genericBases = [
+                    `Explain ${topic} in simple terms.`,
+                    `Compare and contrast ${topic} with similar concepts.`,
+                    `What are the practical applications of ${topic}?`,
+                    `How would you teach ${topic} to students?`,
+                    `What recent developments have there been in ${topic}?`,
+                    `What are the limitations of ${topic}?`,
+                    `How does ${topic} relate to other fields?`,
+                    `What are the key debates surrounding ${topic}?`,
+                    `What are the cultural impacts of ${topic}?`,
+                    `How is ${topic} represented in media?`
+                ];
+                
+                for (let i = 0; i < Math.min(extraCount, genericBases.length); i++) {
+                    questions.push(genericBases[i].replace('${topic}', topic));
+                }
+            }
+            
+            return questions;
+        }
+        
+        function displayQuestions(questions) {
+            const questionList = document.getElementById('question-list');
+            
+            questions.forEach((question, index) => {
+                const li = document.createElement('li');
+                li.className = 'question-item';
+                li.textContent = `${index + 1}. ${question}`;
+                questionList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About ExamSys</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 40px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #ffd700;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 45px;
+            font-size: 22px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff6f61;
+            transform: scale(1.25);
+        }
+
+        /* Hero Section with Video */
+        .hero {
+            padding: 250px 0 200px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: -2;
+        }
+
+        .hero .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 80px;
+            margin-bottom: 40px;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            background: linear-gradient(90deg, #ff6f61, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            font-size: 28px;
+            max-width: 900px;
+            margin: 0 auto;
+            color: #e0e0e0;
+            animation: fadeInUp 1s ease 0.5s;
+            animation-fill-mode: both;
+        }
+
+        /* About Section */
+        .about-content {
+            padding: 100px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .about-text h2 {
+            font-size: 48px;
+            margin-bottom: 25px;
+            color: #ffd700;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            animation: slideInLeft 1s ease;
+        }
+
+        .about-text p {
+            font-size: 20px;
+            color: #e0e0e0;
+            margin-bottom: 25px;
+            animation: slideInLeft 1s ease 0.3s;
+            animation-fill-mode: both;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .about-image img {
+            max-width: 100%;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            animation: slideInRight 1s ease;
+            transition: transform 0.4s ease;
+        }
+
+        .about-image img:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 100px 0;
+            background: rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .team-section h2 {
+            font-size: 48px;
+            margin-bottom: 60px;
+            color: #ffd700;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            animation: fadeInDown 1s ease;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 50px;
+        }
+
+        .team-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 35px;
+            border-radius: 25px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .team-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .team-card:hover {
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .team-card img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            border: 4px solid #ff6f61;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover img {
+            transform: rotate(360deg);
+        }
+
+        .team-card h3 {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .team-card p {
+            font-size: 18px;
+            color: #e0e0e0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 60px;
+            background: rgba(0, 0, 0, 0.25);
+            font-size: 20px;
+        }
+
+        footer p {
+            animation: fadeInUp 1s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 56px;
+            }
+            .hero p {
+                font-size: 22px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .about-content {
+                flex-direction: column;
+                padding: 60px 0;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+            .team-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="nav">
+                <div class="logo">ExamSys</div>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="sub.html">Subjects</a>
+                    <a href="Contact.html">Contact</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-students-walking-in-a-university-4516-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="particles" id="particles"></div>
+        <div class="container">
+            <h1>About ExamSys</h1>
+            <p>Transforming education with cutting-edge technology and seamless exam solutions.</p>
+        </div>
+    </section>
+
+    <section class="about-content">
+        <div class="container">
+            <div class="about-text">
+                <h2>Our Vision</h2>
+                <p>ExamSys is dedicated to redefining the examination experience. We empower educators and students with a platform that combines innovation, security, and ease of use, making assessments more efficient and insightful.</p>
+                <p>Our goal is to lead the future of digital education, fostering a global community of learners and institutions through state-of-the-art technology.</p>
+            </div>
+            <div class="about-image">
+                <img src="exam.webp" alt="ExamSys Vision">
+            </div>
+        </div>
+    </section>
+
+    <section class="team-section">
+        <div class="container">
+            <h2>Our Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="pawan.png" alt="Team Member 1">
+                    <h3>Pawan Tripathi</h3>
+                    <p>Frontend Developer</p>
+                </div>
+                <div class="team-card">
+                    <img src="archi.png" alt="Team Member 2">
+                    <h3>Aarchee Soni</h3>
+                    <p>Backend Developer</p>
+                </div>
+                <div class="team-card">
+                    <img src="rani.png" alt="Team Member 3">
+                    <h3>Rani Tiwari </h3>
+                    <p>DataBase Engineering</p>
+                </div>
+                <div class="team-card">
+                    <img src="vaish.png" alt="Team Member 3">
+                    <h3>Vaishnavi Singh</h3>
+                    <p>Full Stack Developer</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 ExamSys. All rights reserved. | Designed with ❤️ for education.</p>
+    </footer>
+
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js Configuration
+        particlesJS('particles', {
+            particles: {
+                number: { value: 100, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffd700' },
+                shape: { type: 'circle', stroke: { width: 0, color: '#ff6f61' } },
+                opacity: { value: 0.6, random: true },
+                size: { value: 4, random: true },
+                line_linked: { enable: true, distance: 120, color: '#ff6f61', opacity: 0.5, width: 1.5 },
+                move: { enable: true, speed: 4, direction: 'none', random: true, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'bubble' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        // Scroll-triggered animations for team cards
+        const teamCards = document.querySelectorAll('.team-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        teamCards.forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>

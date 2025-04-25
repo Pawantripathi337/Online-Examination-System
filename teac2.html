@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - ExamSys</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e6eef5, #c9d6e3);
+            color: #2d3748;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1f2937, #374151);
+            color: #e5e7eb;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(145deg, #1e3a8a, #3b82f6);
+            color: #fff;
+            padding: 30px 20px;
+            transition: width 0.4s ease-in-out;
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar .logo {
+            font-size: 36px;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 50px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(10px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-nav a i {
+            margin-right: 10px;
+        }
+
+        .toggle-btn {
+            background: #3b82f6;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .toggle-btn:hover {
+            background: #2563eb;
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            transition: margin-left 0.4s ease-in-out;
+        }
+
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 80px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(12px);
+        }
+
+        body.dark-mode .header {
+            background: rgba(31, 41, 55, 0.9);
+        }
+
+        .header h1 {
+            font-size: 40px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ef4444, #fbbf24);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            border-radius: 50%;
+            border: 2px solid #3b82f6;
+        }
+
+        .logout-btn {
+            color: #ef4444;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            background: #3b82f6;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: #2563eb;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #ffffff, #f1f5f9);
+            padding: 30px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid #e5e7eb;
+        }
+
+        body.dark-mode .card {
+            background: linear-gradient(135deg, #374151, #4b5563);
+            border: 1px solid #4b5563;
+        }
+
+        .card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card .value {
+            font-size: 44px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .card .icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 50px;
+            opacity: 0.1;
+        }
+
+        /* Question Management */
+        .section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .question-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: grid;
+            gap: 20px;
+            animation: slideIn 0.5s ease;
+        }
+
+        body.dark-mode .question-form {
+            background: rgba(31, 41, 55, 0.9);
+        }
+
+        .question-form textarea, .question-form input, .question-form select {
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        body.dark-mode .question-form textarea,
+        body.dark-mode .question-form input,
+        body.dark-mode .question-form select {
+            border: 2px solid #4b5563;
+            background: #4b5563;
+            color: #e5e7eb;
+        }
+
+        .question-form textarea:focus, .question-form input:focus, .question-form select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+            outline: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.25);
+            top: -50%;
+            left: -50%;
+            transition: transform 0.5s ease;
+        }
+
+        .action-btn:hover::after {
+            transform: translate(50%, 50%);
+        }
+
+        .push-btn {
+            background: linear-gradient(45deg, #16a34a, #22c55e);
+            color: #fff;
+        }
+
+        .pull-btn {
+            background: linear-gradient(45deg, #2563eb, #3b82f6);
+            color: #fff;
+        }
+
+        .preview-btn {
+            background: linear-gradient(45deg, #d97706, #f59e0b);
+            color: #fff;
+        }
+
+        .export-btn {
+            background: linear-gradient(45deg, #7c3aed, #9f7aea);
+            color: #fff;
+        }
+
+        .delete-btn {
+            background: linear-gradient(45deg, #dc2626, #ef4444);
+            color: #fff;
+            padding: 8px 15px;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #d1d5db;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        body.dark-mode .search-bar input {
+            border: 2px solid #4b5563;
+            background: #4b5563;
+            color: #e5e7eb;
+        }
+
+        .question-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .question-table {
+            background: #374151;
+        }
+
+        .question-table th {
+            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .question-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        body.dark-mode .question-table td {
+            border-bottom: 1px solid #4b5563;
+        }
+
+        tr:hover {
+            background: #f1f5f9;
+            transform: scale(1.01);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode tr:hover {
+            background: #4b5563;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .modal-content {
+            background: #374151;
+            color: #e5e7eb;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+
+        .modal-content button {
+            margin-top: 20px;
+        }
+
+        /* Folder Styles */
+        .folder-container {
+            margin-top: 20px;
+        }
+
+        .folder {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .folder {
+            background: rgba(31, 41, 55, 0.9);
+        }
+
+        .folder-header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .folder-header:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode .folder-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .folder-header i.fa-chevron-down {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .folder-header.active i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .folder-content {
+            display: none;
+            padding: 15px;
+        }
+
+        .folder-content.active {
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar { width: 80px; }
+            .main-content { margin-left: 80px; padding: 20px; }
+            .question-form { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .header { flex-direction: column; text-align: center; gap: 15px; }
+            .button-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">ExamSys</div>
+        <button class="toggle-btn"><i class="fas fa-bars"></i></button>
+        <ul class="sidebar-nav">
+            <li><a href="#" data-section="dashboard" class="active"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li><a href="#" data-section="questions"><i class="fas fa-question-circle"></i><span>Questions</span></a></li>
+            <li><a href="#" data-section="ai-questions"><i class="fas fa-robot"></i><span>AI Questions</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Teacher Dashboard</h1>
+            <div class="header-right">
+                <button class="theme-toggle"><i class="fas fa-moon"></i></button>
+                <div class="user-profile">
+                    <span></span>
+                    <img src="image.png" alt="Profile">
+                </div>
+                <a href="home.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="section active" id="dashboard">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Total Questions</h3>
+                    <div class="value" id="total-questions">128</div>
+                    <i class="fas fa-question-circle icon"></i>
+                </div>
+                <div class="card">
+                    <h3>Assigned Exams</h3>
+                    <div class="value">12</div>
+                    <i class="fas fa-book icon"></i>
+                </div>
+                <div class="card">
+                    <h3>Pending Reviews</h3>
+                    <div class="value">5</div>
+                    <i class="fas fa-hourglass-half icon"></i>
+                </div>
+                <div class="card">
+                    <h3>Students Enrolled</h3>
+                    <div class="value">342</div>
+                    <i class="fas fa-users icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Section -->
+        <div class="section" id="questions">
+            <h2>Question Management</h2>
+            <div class="question-form">
+                <textarea placeholder="Enter your question here..." required></textarea>
+                <select id="question-type" required>
+                    <option value="" disabled selected>Select Type</option>
+                    <option value="mcq">Multiple Choice</option>
+                    <option value="short">Short Answer</option>
+                    <option value="essay">Essay</option>
+                </select>
+                <input type="text" placeholder="Subject (e.g., Mathematics)" required>
+                <div class="button-group">
+                    <button class="action-btn push-btn"><i class="fas fa-upload"></i> Push Question</button>
+                    <button class="action-btn pull-btn"><i class="fas fa-download"></i> Pull from Bank</button>
+                    <button class="action-btn preview-btn"><i class="fas fa-eye"></i> Preview</button>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search questions..." id="search-input">
+            </div>
+            <button class="action-btn export-btn"><i class="fas fa-file-export"></i> Export Questions</button>
+            <table class="question-table">
+                <thead>
+                    <tr>
+                        <th>Question ID</th>
+                        <th>Question</th>
+                        <th>Type</th>
+                        <th>Subject</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="question-table-body">
+                    <tr>
+                        <td>Q001</td>
+                        <td>What is 2 + 2?</td>
+                        <td>MCQ</td>
+                        <td>Mathematics</td>
+                        <td class="action-cell">
+                            <button class="action-btn pull-btn"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- AI-Generated Questions Section -->
+        <div class="section" id="ai-questions">
+            <h2>AI-Generated Questions</h2>
+            <div class="question-form">
+                <input type="text" id="ai-prompt" placeholder="Enter a prompt (e.g., 'Generate engineering questions')">
+                <select id="ai-question-type">
+                    <option value="" disabled selected>Select Type</option>
+                    <option value="mcq">Multiple Choice</option>
+                    <option value="short">Short Answer</option>
+                    <option value="essay">Essay</option>
+                </select>
+                <input type="text" id="ai-subject" placeholder="Subject (e.g., Mechanical Engineering)">
+                <input type="text" id="ai-folder" placeholder="Folder Name (e.g., Engineering Questions)">
+                <div class="button-group">
+                    <button class="action-btn push-btn" id="generate-ai-btn"><i class="fas fa-robot"></i> Generate AI Question</button>
+                    <button class="action-btn preview-btn" id="preview-ai-btn"><i class="fas fa-eye"></i> Preview</button>
+                </div>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search AI questions..." id="ai-search-input">
+            </div>
+            <button class="action-btn export-btn" id="export-ai-btn"><i class="fas fa-file-export"></i> Export AI Questions</button>
+            <div class="folder-container" id="folder-container">
+                <!-- Folders will be dynamically added here -->
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="preview-modal">
+            <div class="modal-content">
+                <h3>Question Preview</h3>
+                <p id="preview-text"></p>
+                <p><strong>Type:</strong> <span id="preview-type"></span></p>
+                <p><strong>Subject:</strong> <span id="preview-subject"></span></p>
+                <button class="action-btn push-btn" id="confirm-add"><i class="fas fa-check"></i> Add Question</button>
+                <button class="action-btn delete-btn" id="close-modal"><i class="fas fa-times"></i> Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js Configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 120, density: { enable: true, value_area: 800 } },
+                color: { value: ['#3b82f6', '#ef4444', '#fbbf24'] },
+                shape: { type: ['circle', 'polygon', 'triangle'] },
+                opacity: { value: 0.7, random: true },
+                size: { value: 5, random: true },
+                line_linked: { enable: true, distance: 130, color: '#3b82f6', opacity: 0.3, width: 1 },
+                move: { enable: true, speed: 5, direction: 'none', random: true }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { repulse: { distance: 120 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        // Sidebar Toggle
+        const sidebar = document.querySelector('.sidebar');
+        const toggleBtn = document.querySelector('.toggle-btn');
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+
+        // Section Switching
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+        const sections = document.querySelectorAll('.section');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.dataset.section;
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                sections.forEach(s => s.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+                document.querySelector('.header h1').textContent = link.querySelector('span').textContent;
+            });
+        });
+
+        // Dark Mode Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        // Question Management
+        const pushBtn = document.querySelector('.push-btn');
+        const pullBtn = document.querySelector('.pull-btn');
+        const previewBtn = document.querySelector('.preview-btn');
+        const exportBtn = document.querySelector('.export-btn');
+        const questionTextarea = document.querySelector('.question-form textarea');
+        const questionType = document.querySelector('#question-type');
+        const subjectInput = document.querySelector('.question-form input');
+        const questionTableBody = document.querySelector('#question-table-body');
+        const totalQuestions = document.querySelector('#total-questions');
+        const searchInput = document.querySelector('#search-input');
+        const modal = document.querySelector('#preview-modal');
+        const previewText = document.querySelector('#preview-text');
+        const previewType = document.querySelector('#preview-type');
+        const previewSubject = document.querySelector('#preview-subject');
+        const confirmAdd = document.querySelector('#confirm-add');
+        const closeModal = document.querySelector('#close-modal');
+
+        function updateQuestionCount() {
+            totalQuestions.textContent = questionTableBody.children.length;
+        }
+
+        function addQuestion() {
+            const newId = `Q${String(questionTableBody.children.length + 1).padStart(3, '0')}`;
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${newId}</td>
+                <td>${questionTextarea.value}</td>
+                <td>${questionType.value.toUpperCase()}</td>
+                <td>${subjectInput.value}</td>
+                <td class="action-cell">
+                    <button class="action-btn pull-btn"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+            `;
+            newRow.style.opacity = '0';
+            questionTableBody.appendChild(newRow);
+            setTimeout(() => {
+                newRow.style.transition = 'opacity 0.5s ease';
+                newRow.style.opacity = '1';
+            }, 10);
+            questionTextarea.value = '';
+            questionType.value = '';
+            subjectInput.value = '';
+            updateQuestionCount();
+            alert('Question added successfully!');
+        }
+
+        pushBtn.addEventListener('click', () => {
+            if (questionTextarea.value && questionType.value && subjectInput.value) {
+                addQuestion();
+            } else {
+                alert('Please fill all fields!');
+            }
+        });
+
+        pullBtn.addEventListener('click', () => {
+            const sampleQuestions = [
+                { text: 'What is the capital of Brazil?', type: 'mcq', subject: 'Geography' },
+                { text: 'Explain quantum mechanics', type: 'essay', subject: 'Physics' },
+                { text: 'Define osmosis', type: 'short', subject: 'Biology' }
+            ];
+            const randomQ = sampleQuestions[Math.floor(Math.random() * sampleQuestions.length)];
+            questionTextarea.value = randomQ.text;
+            questionType.value = randomQ.type;
+            subjectInput.value = randomQ.subject;
+            alert('Question pulled from bank!');
+        });
+
+        previewBtn.addEventListener('click', () => {
+            if (questionTextarea.value && questionType.value && subjectInput.value) {
+                previewText.textContent = questionTextarea.value;
+                previewType.textContent = questionType.value.toUpperCase();
+                previewSubject.textContent = subjectInput.value;
+                modal.style.display = 'flex';
+            } else {
+                alert('Please fill all fields to preview!');
+            }
+        });
+
+        confirmAdd.addEventListener('click', () => {
+            addQuestion();
+            modal.style.display = 'none';
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        questionTableBody.addEventListener('click', (e) => {
+            const target = e.target.closest('.delete-btn');
+            if (target) {
+                const row = target.closest('tr');
+                row.style.transition = 'opacity 0.5s ease';
+                row.style.opacity = '0';
+                setTimeout(() => {
+                    row.remove();
+                    updateQuestionCount();
+                }, 500);
+            }
+        });
+
+        searchInput.addEventListener('input', () => {
+            const filter = searchInput.value.toLowerCase();
+            const rows = questionTableBody.getElementsByTagName('tr');
+            for (let row of rows) {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+            }
+        });
+
+        exportBtn.addEventListener('click', () => {
+            let csv = 'Question ID,Question,Type,Subject\n';
+            const rows = questionTableBody.getElementsByTagName('tr');
+            for (let row of rows) {
+                const cells = row.getElementsByTagName('td');
+                csv += `${cells[0].textContent},"${cells[1].textContent}",${cells[2].textContent},${cells[3].textContent}\n`;
+            }
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'questions.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
+
+        // AI-Generated Questions Management
+        const generateAiBtn = document.querySelector('#generate-ai-btn');
+        const previewAiBtn = document.querySelector('#preview-ai-btn');
+        const exportAiBtn = document.querySelector('#export-ai-btn');
+        const aiPromptInput = document.querySelector('#ai-prompt');
+        const aiQuestionType = document.querySelector('#ai-question-type');
+        const aiSubjectInput = document.querySelector('#ai-subject');
+        const aiFolderInput = document.querySelector('#ai-folder');
+        const aiSearchInput = document.querySelector('#ai-search-input');
+        const folderContainer = document.querySelector('#folder-container');
+
+        // OpenAI API Key (Replace with your actual key from OpenAI)
+        const apiKey = 'YOUR_OPENAI_API_KEY_HERE'; // Get this from https://platform.openai.com/api-keys
+
+        function toggleFolder(header) {
+            const content = header.nextElementSibling;
+            header.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+
+        function addFolder(folderName) {
+            const existingFolder = document.querySelector(`.folder-header span[data-folder="${folderName}"]`);
+            if (!existingFolder) {
+                const newFolder = document.createElement('div');
+                newFolder.className = 'folder';
+                newFolder.innerHTML = `
+                    <div class="folder-header" onclick="toggleFolder(this)">
+                        <i class="fas fa-folder"></i> <span data-folder="${folderName}">${folderName}</span> <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="folder-content">
+                        <table class="question-table">
+                            <thead>
+                                <tr>
+                                    <th>Question ID</th>
+                                    <th>Question</th>
+                                    <th>Type</th>
+                                    <th>Subject</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="ai-question-table-body" data-folder="${folderName}"></tbody>
+                        </table>
+                    </div>
+                `;
+                folderContainer.appendChild(newFolder);
+            }
+        }
+
+        function addAiQuestion(questionText, type, subject, folder = 'Default Folder') {
+            addFolder(folder);
+            const tableBody = document.querySelector(`.ai-question-table-body[data-folder="${folder}"]`);
+            const newId = `AI${String(tableBody.children.length + 1).padStart(3, '0')}`;
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${newId}</td>
+                <td>${questionText}</td>
+                <td>${type.toUpperCase()}</td>
+                <td>${subject}</td>
+                <td class="action-cell">
+                    <button class="action-btn pull-btn"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="action-btn delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                </td>
+            `;
+            newRow.dataset.folder = folder;
+            newRow.style.opacity = '0';
+            tableBody.appendChild(newRow);
+            setTimeout(() => {
+                newRow.style.transition = 'opacity 0.5s ease';
+                newRow.style.opacity = '1';
+            }, 10);
+            // Save to backend
+            saveToBackend(questionText, type, subject, folder, newId);
+        }
+
+        // OpenAI API Integration for Engineering Questions
+        async function generateAiQuestion(prompt, type, subject) {
+            const fullPrompt = `Generate a ${type} question related to ${subject} in the field of engineering. Prompt: ${prompt}`;
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo', // Or use 'gpt-4' if available
+                    messages: [{ role: 'user', content: fullPrompt }],
+                    max_tokens: 150
+                })
+            });
+            if (!response.ok) throw new Error('Failed to generate question');
+            const data = await response.json();
+            return { question: data.choices[0].message.content.trim() };
+        }
+
+        // Backend Integration: Save to Server
+        async function saveToBackend(question, type, subject, folder, id) {
+            try {
+                const response = await fetch('http://localhost:3000/api/ai-questions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question, type, subject, folder, id })
+                });
+                if (!response.ok) throw new Error('Failed to save to backend');
+            } catch (error) {
+                console.error('Backend save error:', error);
+            }
+        }
+
+        // Backend Integration: Load Questions from Server
+        async function loadAiQuestions() {
+            try {
+                const response = await fetch('http://localhost:3000/api/ai-questions');
+                const questions = await response.json();
+                questions.forEach(q => addAiQuestion(q.question, q.type, q.subject, q.folder));
+            } catch (error) {
+                console.error('Error loading questions:', error);
+            }
+        }
+
+        generateAiBtn.addEventListener('click', async () => {
+            if (aiPromptInput.value && aiQuestionType.value && aiSubjectInput.value) {
+                const folderName = aiFolderInput.value || 'Default Folder';
+                try {
+                    const aiResponse = await generateAiQuestion(aiPromptInput.value, aiQuestionType.value, aiSubjectInput.value);
+                    addAiQuestion(aiResponse.question, aiQuestionType.value, aiSubjectInput.value, folderName);
+                    aiPromptInput.value = '';
+                    aiQuestionType.value = '';
+                    aiSubjectInput.value = '';
+                    aiFolderInput.value = '';
+                    alert('AI question generated successfully!');
+                } catch (error) {
+                    alert('Error generating AI question: ' + error.message);
+                }
+            } else {
+                alert('Please fill all required fields!');
+            }
+        });
+
+        previewAiBtn.addEventListener('click', () => {
+            if (aiPromptInput.value && aiQuestionType.value && aiSubjectInput.value) {
+                previewText.textContent = `Preview: ${aiPromptInput.value}`;
+                previewType.textContent = aiQuestionType.value.toUpperCase();
+                previewSubject.textContent = aiSubjectInput.value;
+                modal.style.display = 'flex';
+                confirmAdd.onclick = async () => {
+                    const folderName = aiFolderInput.value || 'Default Folder';
+                    try {
+                        const aiResponse = await generateAiQuestion(aiPromptInput.value, aiQuestionType.value, aiSubjectInput.value);
+                        addAiQuestion(aiResponse.question, aiQuestionType.value, aiSubjectInput.value, folderName);
+                        modal.style.display = 'none';
+                    } catch (error) {
+                        alert('Error generating AI question: ' + error.message);
+                    }
+                };
+            } else {
+                alert('Please fill all fields to preview!');
+            }
+        });
+
+        folderContainer.addEventListener('click', (e) => {
+            const target = e.target.closest('.delete-btn');
+            if (target) {
+                const row = target.closest('tr');
+                row.style.transition = 'opacity 0.5s ease';
+                row.style.opacity = '0';
+                setTimeout(() => row.remove(), 500);
+            }
+        });
+
+        aiSearchInput.addEventListener('input', () => {
+            const filter = aiSearchInput.value.toLowerCase();
+            const tables = document.querySelectorAll('.ai-question-table-body');
+            tables.forEach(table => {
+                const rows = table.getElementsByTagName('tr');
+                for (let row of rows) {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(filter) ? '' : 'none';
+                }
+            });
+        });
+
+        exportAiBtn.addEventListener('click', () => {
+            let csv = 'Question ID,Question,Type,Subject,Folder\n';
+            const tables = document.querySelectorAll('.ai-question-table-body');
+            tables.forEach(table => {
+                const rows = table.getElementsByTagName('tr');
+                for (let row of rows) {
+                    const cells = row.getElementsByTagName('td');
+                    csv += `${cells[0].textContent},"${cells[1].textContent}",${cells[2].textContent},${cells[3].textContent},${row.dataset.folder}\n`;
+                }
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ai-questions.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
+
+        // Initial setup
+        updateQuestionCount();
+        addFolder('Default Folder');
+        loadAiQuestions(); // Load questions from backend on page load
+    </script>
+</body>
+</html>

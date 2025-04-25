@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Exam Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #ecf0f1;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .feedback-container {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 650px;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-in-out;
+            overflow-y: auto;
+            max-height: 90vh;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-subtitle {
+            text-align: center;
+            color: #95a5a6;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 15px;
+            color: #333;
+            background: #ffffff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #2980b9;
+            box-shadow: 0 0 6px rgba(41, 128, 185, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        .rating {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            cursor: pointer;
+            font-size: 26px;
+            color: #d5d8dc;
+            transition: color 0.3s ease;
+        }
+
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #f1c40f;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2980b9;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #2471a3;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #16a085;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @media (max-width: 480px) {
+            .feedback-container {
+                padding: 25px;
+                max-height: 85vh;
+            }
+            h2 {
+                font-size: 24px;
+            }
+            .rating label {
+                font-size: 22px;
+            }
+            .header-subtitle {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="feedback-container">
+        <h2>Course Feedback</h2>
+        <p class="header-subtitle">Your feedback is essential to enhancing our exam management system.</p>
+        <form id="feedbackForm" onsubmit="submitFeedback(event)">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="course">Course Name</label>
+                <select id="course" required>
+                    <option value="">-- Select Course --</option>
+                    <option value="cs101">CS101 - Introduction to Programming</option>
+                    <option value="math201">MATH201 - Calculus II</option>
+                    <option value="eng301">ENG301 - Literature Studies</option>
+                    <option value="bio101">BIO101 - General Biology</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Overall Experience Rating</label>
+                <div class="rating">
+                    <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="comments">Comments or Suggestions</label>
+                <textarea id="comments" placeholder="Please provide your feedback..." required></textarea>
+            </div>
+            <button type="submit">Submit Feedback</button>
+        </form>
+        <div class="success-message" id="successMessage">
+            Thank you for your feedback. Your input has been recorded.
+        </div>
+    </div>
+
+    <script>
+        function submitFeedback(event) {
+            event.preventDefault();
+            const form = document.getElementById('feedbackForm');
+            const successMessage = document.getElementById('successMessage');
+
+            if (form.checkValidity()) {
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+
+                // Reset form after 3 seconds (demo purposes)
+                setTimeout(() => {
+                    form.style.display = 'block';
+                    successMessage.style.display = 'none';
+                    form.reset();
+                }, 3000);
+            } else {
+                form.reportValidity();
+            }
+        }
+    </script>
+</body>
+</html>

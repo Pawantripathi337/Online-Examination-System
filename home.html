@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examination Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 16px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff6f61;
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 220px 0 180px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .hero .background-layers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        .hero .layer-1 {
+            background: url('https://source.unsplash.com/1600x900/?education,technology') no-repeat center/cover;
+            opacity: 0.2;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            animation: zoom 20s infinite;
+        }
+
+        .hero .layer-2 {
+            background: radial-gradient(circle, rgba(255, 111, 97, 0.2) 0%, rgba(255, 215, 0, 0.1) 70%, transparent 100%);
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            transform: translateZ(-200px);
+            animation: parallaxMove 30s infinite linear;
+        }
+
+        .hero .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            margin-bottom: 35px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            color: #ffffff;
+            transition: transform 0.1s ease;
+            transform-style: preserve-3d;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            width: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6f61, #ffd700);
+            transform: translateX(-50%);
+            animation: underline 1.5s ease forwards 0.5s;
+        }
+
+        .hero .tagline {
+            font-size: 28px;
+            max-width: 900px;
+            margin: 0 auto 50px;
+            height: 40px;
+            overflow: hidden;
+            background: linear-gradient(90deg, #ff6f61, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero .tagline span {
+            display: inline-block;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .hero .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .cta-button {
+            background: #ff6f61;
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 111, 97, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 3px solid #ffd700;
+            color: #ffd700;
+            box-shadow: none;
+            animation: float 3s ease-in-out infinite 0.5s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 111, 97, 0.7);
+        }
+
+        .cta-button.secondary:hover {
+            background: #ffd700;
+            color: #1e3c72;
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffd700;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 1s ease;
+            animation-fill-mode: both;
+        }
+
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.4s; }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #ff6f61;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            font-style: italic;
+            animation: fadeInUp 1s ease;
+            animation-fill-mode: both;
+        }
+
+        .testimonial-card:nth-child(2) { animation-delay: 0.2s; }
+
+        .testimonial-card p {
+            margin-bottom: 15px;
+        }
+
+        .testimonial-card cite {
+            font-style: normal;
+            color: #ffd700;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 0;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.05);
+        }
+
+        .pricing-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card .price {
+            font-size: 36px;
+            color: #ff6f61;
+            margin-bottom: 20px;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e3c72;
+        }
+
+        .contact-form textarea {
+            height: 150px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes underline {
+            from { width: 0; }
+            to { width: 60%; }
+        }
+
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes parallaxMove {
+            0% { transform: translateZ(-200px) translateY(0); }
+            50% { transform: translateZ(-200px) translateY(-100px); }
+            100% { transform: translateZ(-200px) translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .features-grid, .testimonial-grid, .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 52px;
+            }
+            .hero .tagline {
+                font-size: 22px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .hero .buttons {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="nav">
+                <div class="logo">ExamSys</div>
+                <div class="nav-links">
+                    <a href="adminlogin.html">Admin</a>
+                    <a href="teacherlogin.html">Teacher</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="faq.html">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="background-layers">
+            <div class="layer-1"></div>
+            <div class="layer-2"></div>
+        </div>
+        <div class="particles" id="particles"></div>
+        <div class="container">
+            <h1 class="tilt">Revolutionize Your Examination Process</h1>
+            <div class="tagline">
+                <span>Streamline Exams with Cutting-Edge Tech</span>
+                <span>Empower Learning Like Never Before</span>
+                <span>Unlock Insights That Inspire Success</span>
+            </div>
+            <div class="buttons">
+                <a href="sub.html" class="cta-button">Start Exam </a>
+              
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Our Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <h3>Student Management</h3>
+                    <p>Effortlessly manage student profiles, track progress, and schedule exams with ease.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Exam Creation</h3>
+                    <p>Design custom exams with a variety of question types and automated grading.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Analytics Dashboard</h3>
+                    <p>Gain deep insights into performance trends and student success metrics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p>"ExamSys transformed how we handle exams. It's intuitive and saves us hours every week!"</p>
+                    <cite>- Dr. Sarah Johnson, Professor</cite>
+                </div>
+                <div class="testimonial-card">
+                    <p>"The analytics feature is a game-changer. We can now track student progress like never before."</p>
+                    <cite>- Mark Lee, Academic Coordinator</cite>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing">
+        <div class="container">
+            <h2 class="section-title">Pricing Plans</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Basic</h3>
+                    <div class="price">$19/month</div>
+                    <p>Up to 100 students<br>Basic analytics<br>Email support</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>Pro</h3>
+                    <div class="price">$49/month</div>
+                    <p>Up to 500 students<br>Advanced analytics<br>Priority support</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>Master</h3>
+                    <div class="price">$99/month</div>
+                    <p>Unlimited students<br>Custom features<br>24/7 support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <footer>
+        <p>© 2025 ExamSys. All rights reserved. | Designed with ❤️ for education.</p>
+    </footer>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Particles.js for particle effect -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Tagline Rotator
+        const taglines = document.querySelectorAll('.tagline span');
+        let currentIndex = 0;
+
+        function rotateTaglines() {
+            taglines[currentIndex].style.opacity = '0';
+            currentIndex = (currentIndex + 1) % taglines.length;
+            taglines[currentIndex].style.opacity = '1';
+        }
+
+        taglines[0].style.opacity = '1';
+        setInterval(rotateTaglines, 3000);
+
+        // Particles.js Configuration
+        particlesJS('particles', {
+            particles: {
+                number: { value: 100, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffd700' },
+                shape: { type: 'star', stroke: { width: 0, color: '#ff6f61' } },
+                opacity: { value: 0.6, random: true },
+                size: { value: 4, random: true },
+                line_linked: { enable: true, distance: 120, color: '#ff6f61', opacity: 0.5, width: 1.5 },
+                move: { enable: true, speed: 4, direction: 'none', random: true, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { grab: { distance: 150, line_linked: { opacity: 0.7 } }, push: { particles_nb: 5 } }
+            },
+            retina_detect: true
+        });
+
+        // 3D Tilt Effect for Title
+        const tiltElement = document.querySelector('.tilt');
+        document.addEventListener('mousemove', (e) => {
+            const rect = tiltElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const mouseX = e.clientX - centerX;
+            const mouseY = e.clientY - centerY;
+            const rotateX = mouseY / 100;
+            const rotateY = -mouseX / 100;
+            tiltElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            tiltElement.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
+</body>
+</html>

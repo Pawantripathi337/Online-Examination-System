@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamSys - Mathematics Exam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .exam-container {
+            display: flex;
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4c5eaf;
+            margin-bottom: 20px;
+        }
+
+        .attempted-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .attempted-questions span {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: #4CAF50;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .exam-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4e4caf;
+        }
+
+        .timer {
+            font-size: 18px;
+            font-weight: 500;
+            color: #e74c3c;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0;
+            background: #44a595;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 18px;
+            font-weight: 500;
+            color: #5e5a5a;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: #f1f1f1;
+            border-color: #4CAF50;
+        }
+
+        .option.selected {
+            background: #4CAF50;
+            border-color: #4CAF50;
+            color: #fff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .navigation-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .navigation-buttons button:disabled {
+            background: #ddd;
+            cursor: not-allowed;
+        }
+
+        .navigation-buttons .prev-btn {
+            background: #f1c40f;
+            color: #333;
+        }
+
+        .navigation-buttons .prev-btn:hover {
+            background: #f39c12;
+        }
+
+        .navigation-buttons .next-btn {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        .navigation-buttons .next-btn:hover {
+            background: #45a049;
+        }
+
+        .submit-btn {
+            background: #e74c3c;
+            color: #fff;
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%) rotate(45deg);
+            transition: all 0.5s ease;
+            z-index: 0;
+        }
+
+        .submit-btn:hover::before {
+            transform: translate(-50%, -50%) rotate(135deg);
+        }
+
+        .submit-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .submit-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4);
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .result-container h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .result-container p {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .logout-btn {
+            display: inline-block;
+            background: #3498db;
+            color: #fff;
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .wrong-answer {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .wrong-answer h3 {
+            font-size: 20px;
+            font-weight: 500;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .wrong-answer p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .correct-answer {
+            color: #4CAF50;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .exam-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+
+            .option {
+                padding: 10px;
+            }
+
+            .navigation-buttons button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="exam-container">
+        <!-- Sidebar for Attempted Questions -->
+        <div class="sidebar">
+            <h2>Attempted Questions</h2>
+            <div class="attempted-questions" id="attempted-questions"></div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Exam Header -->
+            <div class="exam-header">
+                <h1> Mathematics Exam</h1>
+                <div class="timer">Time Left: 15:00</div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+
+            <!-- Question Container -->
+            <div class="question-container">
+                <div class="question-number" id="question-number">Question 1 of 15</div>
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="options"></div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation-buttons">
+                <button class="prev-btn" id="prev-btn" disabled>Previous</button>
+                <button class="next-btn" id="next-btn">Next</button>
+            </div>
+
+            <!-- Submit Button -->
+            <button class="submit-btn" id="submit-btn">
+                <span>Submit Exam</span>
+            </button>
+
+            <!-- Result Container -->
+            <div class="result-container" id="result-container">
+                <h2>Exam Result</h2>
+                <p id="result-text"></p>
+                <div id="wrong-answers"></div>
+                <a href="sub.html" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mathematics-specific questions
+        const questions = [
+            {
+                question: "What is the value of 2 + 3 × 4?",
+                options: ["20", "14", "10", "11"],
+                answer: "14"
+            },
+            {
+                question: "What is the square root of 144?",
+                options: ["10", "12", "14", "16"],
+                answer: "12"
+            },
+            {
+                question: "Solve for x: 2x + 5 = 15",
+                options: ["5", "7", "10", "12"],
+                answer: "5"
+            },
+            {
+                question: "What is the area of a rectangle with length 6 and width 4?",
+                options: ["18", "20", "24", "28"],
+                answer: "24"
+            },
+            {
+                question: "What is the value of π (pi) approximately?",
+                options: ["2.14", "3.14", "4.14", "5.14"],
+                answer: "3.14"
+            },
+            {
+                question: "What is the sum of angles in a triangle?",
+                options: ["90°", "180°", "270°", "360°"],
+                answer: "180°"
+            },
+            {
+                question: "What is 15% of 200?",
+                options: ["25", "30", "35", "40"],
+                answer: "30"
+            },
+            {
+                question: "Simplify: (x²)³",
+                options: ["x⁵", "x⁶", "x⁸", "x⁹"],
+                answer: "x⁶"
+            },
+            {
+                question: "What is the perimeter of a square with side length 5?",
+                options: ["15", "20", "25", "30"],
+                answer: "20"
+            },
+            {
+                question: "What is the value of sin(90°)?",
+                options: ["0", "1", "0.5", "-1"],
+                answer: "1"
+            },
+            {
+                question: "Solve: 3x - 7 = 14",
+                options: ["5", "6", "7", "8"],
+                answer: "7"
+            },
+            {
+                question: "What is the volume of a cube with side length 3?",
+                options: ["9", "18", "27", "36"],
+                answer: "27"
+            },
+            {
+                question: "What is the slope of the line y = 2x + 3?",
+                options: ["1", "2", "3", "4"],
+                answer: "2"
+            },
+            {
+                question: "What is the value of 5! (factorial)?",
+                options: ["20", "60", "120", "150"],
+                answer: "120"
+            },
+            {
+                question: "What is the solution to the equation x² - 4 = 0?",
+                options: ["x = 2", "x = -2", "x = ±2", "x = 4"],
+                answer: "x = ±2"
+            }
+        ];
+
+        let currentQuestion = 0;
+        const totalQuestions = questions.length;
+        const attemptedQuestions = new Set();
+        const userAnswers = new Array(totalQuestions).fill(null);
+
+        // DOM Elements
+        const questionNumberElement = document.getElementById('question-number');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsElement = document.getElementById('options');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressElement = document.getElementById('progress');
+        const attemptedQuestionsElement = document.getElementById('attempted-questions');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultContainer = document.getElementById('result-container');
+        const resultText = document.getElementById('result-text');
+        const wrongAnswersElement = document.getElementById('wrong-answers');
+
+        // Load question
+        const loadQuestion = () => {
+            const question = questions[currentQuestion];
+            questionNumberElement.textContent = `Question ${currentQuestion + 1} of ${totalQuestions}`;
+            questionTextElement.textContent = question.question;
+            optionsElement.innerHTML = question.options
+                .map(
+                    (option, index) => `
+                    <div class="option">
+                        <input type="radio" name="answer" id="option${index + 1}" value="${option}" 
+                            ${userAnswers[currentQuestion] === option ? 'checked' : ''}>
+                        <label for="option${index + 1}">${option}</label>
+                    </div>
+                `
+                )
+                .join('');
+
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            progressElement.style.width = `${progress}%`;
+
+            // Disable/enable navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.disabled = currentQuestion === totalQuestions - 1;
+
+            // Update attempted questions panel
+            updateAttemptedQuestions();
+        };
+
+        // Update attempted questions panel
+        const updateAttemptedQuestions = () => {
+            attemptedQuestionsElement.innerHTML = Array.from(attemptedQuestions)
+                .map(
+                    (q) => `
+                    <span>${q + 1}</span>
+                `
+                )
+                .join('');
+        };
+
+        // Event listeners for navigation
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                loadQuestion();
+            }
+        });
+
+        // Event listener for option selection
+        optionsElement.addEventListener('click', (e) => {
+            if (e.target.tagName === 'INPUT') {
+                userAnswers[currentQuestion] = e.target.value;
+                attemptedQuestions.add(currentQuestion);
+                updateAttemptedQuestions();
+            }
+        });
+
+        // Event listener for submit button
+        submitBtn.addEventListener('click', () => {
+            const correctAnswers = userAnswers.reduce((count, answer, index) => {
+                return count + (answer === questions[index].answer ? 1 : 0);
+            }, 0);
+            resultText.textContent = `You scored ${correctAnswers} out of ${totalQuestions}.`;
+
+            // Display correct answers for wrong questions
+            wrongAnswersElement.innerHTML = questions
+                .map((question, index) => {
+                    if (userAnswers[index] !== question.answer) {
+                        return `
+                            <div class="wrong-answer">
+                                <h3>Question ${index + 1}: ${question.question}</h3>
+                                <p>Your Answer: ${userAnswers[index] || "Not Attempted"}</p>
+                                <p class="correct-answer">Correct Answer: ${question.answer}</p>
+                            </div>
+                        `;
+                    }
+                    return '';
+                })
+                .join('');
+
+            resultContainer.style.display = 'block';
+            submitBtn.style.display = 'none'; // Hide submit button after submission
+            clearInterval(timerInterval);
+        });
+
+        // Load the first question
+        loadQuestion();
+
+        // Timer functionality (15 minutes)
+        let timeLeft = 900;
+        const timerElement = document.querySelector('.timer');
+
+        const updateTimer = () => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                clearInterval(timerInterval);
+                alert("Time's up! Your exam has ended.");
+                submitBtn.click();
+            }
+        };
+
+        const timerInterval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+
+</html>

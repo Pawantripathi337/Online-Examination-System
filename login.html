@@ -1,0 +1,46 @@
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExamSys - Sign Up</title>
+    <!-- Reuse the same CSS from login.html -->
+    <link rel="stylesheet" href="login.css"> <!-- If you extract CSS to a separate file -->
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="login-container">
+        <div class="logo">ExamSys</div>
+        <form id="signup-form">
+            <div class="form-group">
+                <input type="text" id="username" placeholder=" " required>
+                <label for="username">Username</label>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" placeholder=" " required>
+                <label for="email">Email</label>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder=" " required>
+                <label for="password">Password</label>
+            </div>
+            <button type="submit" class="login-btn">Sign Up</button>
+        </form>
+        <div class="options">
+            <a href="login.html" class="signup-link">Already have an account? Login</a>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS('particles-js', { /* Same config as login */ });
+        const signupForm = document.getElementById('signup-form');
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Sign up successful! Redirecting to login...');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Selection - ExamSys</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            color: #ffd700;
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 40px;
+            font-size: 20px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff6f61;
+            transform: scale(1.2);
+        }
+
+        /* Hero Section with Video */
+        .hero {
+            padding: 200px 0 150px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.35;
+            z-index: -2;
+        }
+
+        .hero .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            margin-bottom: 40px;
+            text-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+            background: linear-gradient(90deg, #ff6f61, #ffd700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: fadeInDown 1s ease;
+            position: relative;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            width: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6f61, #ffd700);
+            transform: translateX(-50%);
+            animation: underline 2s ease forwards 0.5s;
+        }
+
+        /* Subject Grid */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            padding: 0 20px;
+            margin-top: 60px;
+        }
+
+        .subject-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 35px;
+            border-radius: 25px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            backdrop-filter: blur(8px);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease;
+            animation-fill-mode: both;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .subject-card:nth-child(2) { animation-delay: 0.2s; }
+        .subject-card:nth-child(3) { animation-delay: 0.4s; }
+        .subject-card:nth-child(4) { animation-delay: 0.6s; }
+        .subject-card:nth-child(5) { animation-delay: 0.8s; }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(255, 111, 97, 0.3), rgba(255, 215, 0, 0.3));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+            transform: rotate(30deg);
+        }
+
+        .subject-card:hover::before {
+            opacity: 1;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-20px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border-color: #ff6f61;
+        }
+
+        .subject-card h2 {
+            font-size: 30px;
+            margin-bottom: 20px;
+            color: #ffd700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .subject-card p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        .subject-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6f61, #ff8f7a);
+            padding: 16px 45px;
+            border-radius: 35px;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 111, 97, 0.6);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .subject-button:hover {
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: 0 15px 35px rgba(255, 111, 97, 0.8);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 50px;
+            background: rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes underline {
+            from { width: 0; }
+            to { width: 80%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 52px;
+            }
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+            .subject-card {
+                padding: 30px;
+            }
+            .subject-button {
+                padding: 14px 40px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="nav">
+                <div class="logo">ExamSys</div>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="rar.html">Rules and Regulation </a>
+                    <a href="feedback.html">Feedback Form</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop>
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-students-taking-an-exam-in-a-classroom-4517-large.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="particles" id="particles"></div>
+        <div class="container">
+            <h1 class="tilt">Select Your Subject</h1>
+            <div class="subject-grid">
+                <div class="subject-card">
+                    <h2>Database Management System</h2>
+                    <p>Test your skills in algebra, calculus, and more.</p>
+                    <a href="https://quilgo.com/t/Qx957WoM9chAx6SV" class="subject-button">Start Exam</a>
+                </div>
+                <div class="subject-card">
+                    <h2>Analysis of Algorithm </h2>
+                    <p> the performance of an algorithm in terms of time and space complexity. It helps determine how efficiently an algorithm runs as input size increases.</p>
+                    <a href="https://quilgo.com/t/IOyYw4P98LC7Pqj8" class="subject-button">Start Exam</a>
+                </div>
+                <div class="subject-card">
+                    <h2>English</h2>
+                    <p>Improve your grammar, vocabulary, and comprehension.</p>
+                    <a href="https://quilgo.com/t/xNzOmQ8Q7SdthaeB" class="subject-button">Start Exam</a>
+                </div>
+                <div class="subject-card">
+                    <h2>Microprocesor</h2>
+                    <p>It refers to evaluating how efficiently an algorithm runs on a microprocessor based on execution time, instruction cycles, and memory usage.</p>
+                    <a href="https://quilgo.com/t/FkHAfga3sO95Iqdt" class="subject-button">Start Exam</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 ExamSys. All rights reserved. | Designed with ❤️ for education.</p>
+    </footer>
+
+    <!-- Font Awesome for icons (optional if you add icons later) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Particles.js for particle effect -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js Configuration
+        particlesJS('particles', {
+            particles: {
+                number: { value: 100, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffd700' },
+                shape: { type: 'circle', stroke: { width: 0, color: '#ff6f61' } },
+                opacity: { value: 0.6, random: true },
+                size: { value: 4, random: true },
+                line_linked: { enable: true, distance: 120, color: '#ff6f61', opacity: 0.5, width: 1.5 },
+                move: { enable: true, speed: 4, direction: 'none', random: true, straight: false, out_mode: 'out' }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'bubble' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        // 3D Tilt Effect for Title
+        const tiltElement = document.querySelector('.tilt');
+        document.addEventListener('mousemove', (e) => {
+            const rect = tiltElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const mouseX = e.clientX - centerX;
+            const mouseY = e.clientY - centerY;
+            const rotateX = mouseY / 100;
+            const rotateY = -mouseX / 100;
+            tiltElement.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            tiltElement.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
+    </script>
+</body>
+</html>
